@@ -11,14 +11,16 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
+import charachteresReducer from "./characteresSlce";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: [],
+  whitelist: ["charachteres"],
 };
 
 const rootReducer = combineReducers({
+  charachteres: charachteresReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
