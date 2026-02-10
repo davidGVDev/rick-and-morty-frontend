@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import type { Character } from "../store/characteresSlce";
 import { toggleFavorite } from "../store/characteresSlce";
 import { AppDispatch } from "../store/store";
+import { ModalCharachter } from "./ModalCharachter";
 
 interface CardCharachterProps {
   character: Character;
@@ -17,13 +18,9 @@ export const CardCharachter = ({ character }: CardCharachterProps) => {
   };
 
   return (
-    <div className="card w-[260px] h-[294px] bg-white rounded-md m-1 p-1 flex flex-col justify-start items-center pt-2 cursor-pointer">
+    <div className="card w-[260px] h-[294px] bg-white rounded-md m-1 p-1 flex flex-col justify-start items-center pt-2">
       <div className="image w-[240px] h-[240px] shrink-0 bg-gray-200 rounded-md overflow-hidden">
-        <img
-          src={character.image}
-          alt={character.name}
-          className="w-full h-full max-w-[240px] max-h-[240px] object-cover object-center"
-        />
+        <ModalCharachter character={character} />
       </div>
       <div className="content w-full flex justify-between items-center p-2">
         <h3 className="text-[14px]">{character.name}</h3>
