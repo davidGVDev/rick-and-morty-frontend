@@ -41,7 +41,7 @@ interface CharactersState {
 
 const BASE_URL = "https://rickandmortyapi.com/api/character";
 
-// Thunk: GET personajes y normalizar (añadir isFavorite: false)
+
 export const fetchCharacters = createAsyncThunk<
   Character[],
   number | void,

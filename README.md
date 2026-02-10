@@ -10,7 +10,8 @@ Aplicación web de frontend que consume [The Rick and Morty API](https://rickand
 - **Fuente de datos:** [The Rick and Morty API](https://rickandmortyapi.com/) (personajes, paginación).
 - **Funcionalidades principales:**
   - **Inicio:** Encabezado con título “Base de datos de personajes”, barra de búsqueda y enlace “Mis favoritos” que lleva a la página de favoritos.
-  - **Listado de personajes:** Grid de tarjetas (cards) con imagen, nombre y estrella para marcar/desmarcar favorito. Los datos se cargan por página desde el API y se guardan en Redux (con persistencia).
+  - **Listado de personajes:** Grid de tarjetas (cards) con imagen, nombre y estrella para marcar/desmarcar favorito. Al hacer clic en la imagen se abre un **modal** con información detallada del personaje. Los datos se cargan por página desde el API y se guardan en Redux (con persistencia).
+  - **Modal de personaje:** Al hacer clic en la imagen de una card se abre un diálogo con la información del personaje: nombre, imagen, estado, género, especie, origen y ubicación.
   - **Favoritos:** Página “Mis favoritos” que muestra solo los personajes marcados con la estrella, reutilizando el mismo grid. Incluye botón “Volver” para regresar al inicio.
   - **Persistencia:** Redux Persist guarda el estado (personajes cargados y lista de favoritos) en `localStorage`, de modo que al recargar la página se mantienen los favoritos y, si aplica, la última lista cargada.
 
@@ -46,7 +47,8 @@ src/
 │   ├── CardCharachter.tsx     # Tarjeta de personaje: imagen, nombre, estrella (toggle favorito)
 │   ├── GridListCharacters.tsx # Grid de tarjetas; puede mostrar lista del store o lista pasada por props (ej. favoritos)
 │   ├── HeaderComponent.tsx    # Encabezado: título, subtítulo, búsqueda, enlace "Mis favoritos"
-│   └── ui/                    # Componentes shadcn/ui (button, input, card, etc.)
+│   ├── ModalCharachter.tsx    # Modal con información detallada del personaje (imagen, estado, género, especie, origen, ubicación)
+│   └── ui/                    # Componentes shadcn/ui (button, input, card, dialog, etc.)
 ├── hooks/
 │   └── use-mobile.ts
 ├── lib/
@@ -93,7 +95,35 @@ La respuesta del API se mapea para añadir `isFavorite: false` y guardar solo `o
 1. **Carga inicial (Home):** Al montar la vista se dispara `fetchCharacters(1)`. Los resultados se guardan en `characters` y, si ya había estado persistido, se conservan los `isFavorite` y se actualiza `favorites` con `characters.filter(c => c.isFavorite)`.
 2. **Marcar/desmarcar favorito:** En una card se hace clic en la estrella → `toggleFavorite(id)` actualiza `isFavorite` en `characters` y añade o quita el personaje de `favorites`.
 3. **Ver favoritos:** El usuario navega a “Mis favoritos” → FavoritesPage lee `state.charachteres.favorites` y pasa esa lista a `<GridListCharacters characters={favorites} />`, que no hace fetch y solo pinta las cards de esos personajes.
-4. **Volver:** En FavoritesPage, “Volver” navega a `/` (HomePage).
+4. **Volver:** En FavoritesPage, "Volver" navega a `/` (HomePage).
+5. **Modal de personaje:** Al hacer clic en la imagen de una card se abre `<ModalCharachter character={...} />`, un diálogo que muestra imagen, nombre, estado, género, especie, origen y ubicación. Incluye botón "Cerrar". “Volver” navega a `/` (HomePage).
+
+---
+
+## Modal de personaje
+
+El componente `ModalCharachter` muestra un diálogo con la información detallada del personaje al hacer clic en su imagen:
+
+| Campo      | Descripción                         |
+|------------|-------------------------------------|
+| Imagen     | Foto del personaje                  |
+| Nombre     | Nombre completo                     |
+| Estado     | Alive / Dead / unknown              |
+| Género     | Male / Female / unknown, etc.       |
+| Especie    | Human, Alien, etc.                  |
+| Origen     | Planeta o lugar de procedencia      |
+| Ubicación  | Lugar actual del personaje          |
+
+El modal utiliza `Dialog` de shadcn/ui y está integrado en cada card mediante `<ModalCharachter character={character} />`.
+
+---
+
+## Posibles mejoras / Features futuras
+
+Funcionalidades que podrían incorporarse en futuras versiones:
+
+- **Paginación:** Permitir navegar entre páginas del API (actualmente se carga solo la primera página) y mostrar controles de paginación en la interfaz.
+- **Buscador en tiempo real:** Implementar búsqueda mientras el usuario escribe, con filtrado o llamadas al API según los criterios seleccionados.
 
 ---
 
